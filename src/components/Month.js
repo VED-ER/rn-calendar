@@ -44,7 +44,10 @@ const Month = ({ days, height, width }) => {
                 bounces={false}
             />
             <View style={styles.addEventBtn}>
-                <Pressable style={({ pressed }) => pressed && { opacity: 0.5 }} onPress={() => navigation.navigate(ADD_EVENT, { days: JSON.stringify(days) })}>
+                <Pressable
+                    style={({ pressed }) => pressed && { opacity: 0.5 }}
+                    onPress={() => navigation.navigate(ADD_EVENT, { days: JSON.stringify(days) })}
+                >
                     <MaterialIcons name="add" size={34} color="white" />
                 </Pressable>
             </View>
