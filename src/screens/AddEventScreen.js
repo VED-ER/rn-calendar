@@ -8,31 +8,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const KEY = 'EVENTS_DATA';
 
-const AddEventScreen = ({ navigation, route }) => {
+const AddEventScreen = ({ navigation }) => {
     const [date, setDate] = useState(new Date());
     const [eventData, setEventData] = useState({});
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartTimePicker, setShowStartTimePicker] = useState(false);
     const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-
-    const days = JSON.parse(route.params.days);
-
-    const saveEvent = async (data) => {
-        try {
-            const d = await AsyncStorage.getItem(KEY);
-            if (d !== null) {
-                const eventsArray = JSON.parse(d);
-                eventsArray.push(data);
-                await AsyncStorage.setItem(KEY, JSON.stringify(eventsArray));
-            } else {
-                console.log('no events if');
-
-                await AsyncStorage.setItem(KEY, JSON.stringify([data]));
-            }
-        } catch (error) {
-            Alert.alert('error', 'save error');
-        }
-    };
 
     const selectDatePressHandler = () => {
         setShowDatePicker(true);
@@ -109,26 +90,15 @@ const AddEventScreen = ({ navigation, route }) => {
                 />
                 <Text>All day?</Text>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={styles.selectTimeContainer}>
                 <View style={{ flex: 1 }}>
-
                     <Text>Start time</Text>
                     <Pressable
                         disabled={eventData.allDay ? true : false}
                         onPress={() => setShowStartTimePicker(true)}
                         style={({ pressed }) => pressed && { opacity: 0.5 }}
                     >
-                        <View style={{
-                            flexDirection: 'row',
-                            maxWidth: '80%',
-                            justifyContent: 'space-between',
-                            alignItems: "center",
-                            borderWidth: 1,
-                            borderColor: 'lightgray',
-                            borderRadius: 10,
-                            padding: 5,
-                            marginTop: 5
-                        }}>
+                        <View style={styles.selectTimeInput}>
                             <Text>{`${eventData?.startTime ? format(eventData.startTime, 'HH : mm aa') : '-- : -- --'} `}</Text>
                             <MaterialIcons name='access-time' size={24} />
                         </View>
@@ -141,26 +111,16 @@ const AddEventScreen = ({ navigation, route }) => {
                         onPress={() => setShowEndTimePicker(true)}
                         style={({ pressed }) => pressed && { opacity: 0.5 }}
                     >
-                        <View style={{
-                            flexDirection: 'row',
-                            maxWidth: '80%',
-                            justifyContent: 'space-between',
-                            alignItems: "center",
-                            borderWidth: 1,
-                            borderColor: 'lightgray',
-                            borderRadius: 10,
-                            padding: 5,
-                            marginTop: 5
-                        }}>
+                        <View style={styles.selectTimeInput}>
                             <Text>{`${eventData?.endTime ? format(eventData.endTime, 'HH : mm aa') : '-- : -- --'} `}</Text>
                             <MaterialIcons name='access-time' size={24} />
                         </View>
                     </Pressable>
                 </View>
             </View>
-            <View style={{ marginTop: 20 }}>
+            <View style={styles.colorSelectContainer}>
                 <Text>Color</Text>
-                <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                <View style={styles.colorsContainer}>
                     <Pressable
                         style={[styles.colorBox, { backgroundColor: 'blue' }, eventData.color === 'blue' && { opacity: 1 }]}
                         onPress={() => handleColorSelect('blue')}
@@ -179,7 +139,7 @@ const AddEventScreen = ({ navigation, route }) => {
                 onPress={addButtonHandler}
                 style={({ pressed }) => pressed ? [styles.addBtn, { opacity: 0.5 }] : styles.addBtn}
             >
-                <Text style={{ color: 'green', textAlign: 'center' }}>Add Event</Text>
+                <Text style={styles.addBtnText}>Add Event</Text>
             </Pressable>
             <DateTimePickerModal
                 isVisible={showDatePicker}
@@ -232,6 +192,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    selectTimeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    selectTimeInput: {
+        flexDirection: 'row',
+        maxWidth: '80%',
+        justifyContent: 'space-between',
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: 'lightgray',
+        borderRadius: 10,
+        padding: 5,
+        marginTop: 5
+    },
+    colorSelectContainer: {
+        marginTop: 20
+    },
+    colorsContainer: {
+        flexDirection: 'row',
+        marginTop: 5
+    },
     colorBox: {
         height: 50,
         width: 50,
@@ -246,5 +228,9 @@ const styles = StyleSheet.create({
         borderColor: 'green',
         marginTop: 20,
         padding: 10
+    },
+    addBtnText: {
+        color: 'green',
+        textAlign: 'center'
     }
 });

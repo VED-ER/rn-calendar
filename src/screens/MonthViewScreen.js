@@ -1,11 +1,21 @@
-import { FlatList, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Month from '../components/Month';
-import { addMonths, addWeeks, daysToWeeks, eachDayOfInterval, endOfMonth, endOfWeek, format, startOfMonth, startOfWeek, subMonths } from 'date-fns';
+import {
+    addMonths,
+    addWeeks,
+    daysToWeeks,
+    eachDayOfInterval,
+    endOfMonth,
+    endOfWeek,
+    format,
+    startOfMonth,
+    startOfWeek,
+    subMonths
+} from 'date-fns';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function MonthViewScreen({ navigation }) {
-
     const [height, setHeight] = useState(1);
     const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -45,16 +55,28 @@ export default function MonthViewScreen({ navigation }) {
         navigation.setOptions({
             title: format(currentDate, 'MMMM yyyy'),
             headerRight: () => (
-                <View style={{ flexDirection: 'row', marginRight: 10, alignItems: 'center', justifyContent: 'space-between', flex: 1, width: 120 }}>
+                <View style={styles.headerContainer}>
                     <Pressable android_ripple={{ color: 'lightgray' }} onPress={todayBtnHandler} >
-                        <MaterialIcons name="calendar-today" size={24} color="black" />
+                        <MaterialIcons
+                            name="calendar-today"
+                            size={24}
+                            color="black"
+                        />
                     </Pressable>
-                    <View style={{ flexDirection: 'row', width: 75, justifyContent: 'space-between' }}>
+                    <View style={styles.headerInnerContainer}>
                         <Pressable android_ripple={{ color: 'lightgray' }} onPress={prevMonthBtnHandler}>
-                            <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
+                            <MaterialIcons
+                                name="keyboard-arrow-left"
+                                size={34}
+                                color="black"
+                            />
                         </Pressable>
                         <Pressable android_ripple={{ color: 'lightgray' }} onPress={nextMonthBtnHandler}>
-                            <MaterialIcons name="keyboard-arrow-right" size={34} color="black" />
+                            <MaterialIcons
+                                name="keyboard-arrow-right"
+                                size={34}
+                                color="black"
+                            />
                         </Pressable>
                     </View>
                 </View>
@@ -62,14 +84,11 @@ export default function MonthViewScreen({ navigation }) {
         });
     }, [navigation, currentDate]);
 
-
-
     return (
         <View style={styles.container} onLayout={onLayout}>
             <Month
                 days={checkNumberOfWeeks(currentMonthDays)}
                 height={height - 40}
-                setCurrentDate={setCurrentDate}
             />
         </View>
     );
@@ -78,5 +97,18 @@ export default function MonthViewScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        marginRight: 10,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: 1,
+        width: 120
+    },
+    headerInnerContainer: {
+        flexDirection: 'row',
+        width: 75,
+        justifyContent: 'space-between'
     }
 });

@@ -15,16 +15,14 @@ const DrawerNavigator = () => {
                 options={{
                     headerShadowVisible: false,
                     headerTitleAlign: 'left',
-                    drawerLabel: 'Month',
-
+                    drawerLabel: 'Month'
                 }}
             />
             <Drawer.Screen
                 name={DAY_VIEW}
                 component={DayView}
                 options={{
-                    drawerLabel: 'Day',
-
+                    drawerLabel: 'Day'
                 }}
             />
         </Drawer.Navigator>

@@ -4,19 +4,10 @@ import { format, isToday } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 import { DAY_VIEW } from '../navigations/routes';
 
-const MonthDay = ({ date, height, index, events }) => {
-    const [currentDayEvents, setCurrentDayEvents] = useState([]);
+const MonthDay = ({ date, height, index }) => {
     const navigation = useNavigation();
     const today = isToday(date);
 
-    if (events.length > 0) {
-        const e = events.filter(e => e.date === date.toISOString());
-        setCurrentDayEvents(e);
-        // console.log(date.toIsoString());
-        // console.log(typeof events[0].date);
-        // console.log(events);
-    }
-    console.log(date, '  ', currentDayEvents);
     return (
         <Pressable style={[styles.container, {
             height: height / 6,
