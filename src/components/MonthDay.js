@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { format, isToday } from 'date-fns';
+import { format, isSameMonth, isToday } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 import { DAY_VIEW } from '../navigations/routes';
 
-const MonthDay = ({ date, height, index, dayEvents }) => {
+const MonthDay = ({ date, height, index, dayEvents, isCurrentMonthDay }) => {
     const navigation = useNavigation();
     const today = isToday(date);
 
@@ -46,9 +46,9 @@ const MonthDay = ({ date, height, index, dayEvents }) => {
         <Pressable style={[styles.container, {
             height: height / 6,
             borderBottomWidth: index > 34 ? 0 : 1
-        }]}
+        }, isCurrentMonthDay ? {} : { backgroundColor: '#f0f0f0' }]}
             android_ripple={{ color: 'lightgray' }}
-            onPress={() => navigation.navigate(DAY_VIEW)}
+            onPress={() => navigation.navigate(DAY_VIEW, { dayDate: date.toDateString() })}
         >
             <View>
                 <View style={today ? styles.activeDay : {}}>
@@ -76,16 +76,19 @@ const styles = StyleSheet.create({
         borderColor: "lightgray"
     },
     dayNumber: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13
     },
     dayNumberActive: {
         textAlign: 'center',
-        color: 'white'
+        color: 'white',
+        fontSize: 13
     },
     activeDay: {
         backgroundColor: 'darkblue',
         borderRadius: 20,
-        width: 20,
+        width: 22,
+        height: 22,
         alignSelf: 'center'
     },
     dayEventsContainer: {
@@ -104,8 +107,7 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
         borderRadius: 10,
-        marginRight: 5,
-        // marginBottom: 2
+        marginRight: 5
     },
     timedDayEventContainer: {
         flexDirection: 'row',

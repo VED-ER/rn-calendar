@@ -6,19 +6,21 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { ADD_EVENT } from '../navigations/routes';
 import AppContext from '../store/AppContext';
+import { isSameMonth } from 'date-fns';
 
 const numColumns = 7;
 
 const Month = ({ days, height, width }) => {
     const navigation = useNavigation();
 
-    const { events } = useContext(AppContext);
+    const { events, currentDate } = useContext(AppContext);
 
     const renderItem = ({ item, index }) => {
         const dayEvents = events.filter(e => e.date === item.toDateString());
 
+        const isCurrentMonthDay = isSameMonth(item, currentDate);
         return (
-            <MonthDay date={item} height={height} index={index} dayEvents={dayEvents} />
+            <MonthDay date={item} height={height} index={index} dayEvents={dayEvents} isCurrentMonthDay={isCurrentMonthDay} />
         );
     };
 
