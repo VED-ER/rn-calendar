@@ -1,26 +1,28 @@
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { v4 as uuidv4 } from 'uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppContext from '../store/AppContext';
 
 const KEY = 'EVENTS_DATA';
 
 const AddEventScreen = ({ navigation }) => {
-    const [date, setDate] = useState(new Date());
     const [eventData, setEventData] = useState({});
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartTimePicker, setShowStartTimePicker] = useState(false);
     const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+
+    const { currentDate, setCurrentDate, setEvents } = useContext(AppContext);
 
     const selectDatePressHandler = () => {
         setShowDatePicker(true);
     };
 
     const handleDateConfirm = (selectedDate) => {
-        setDate(selectedDate);
+        setCurrentDate(selectedDate);
         setShowDatePicker(false);
     };
 
@@ -55,21 +57,20 @@ const AddEventScreen = ({ navigation }) => {
             headerRight: () => (
                 <View>
                     <Pressable style={({ pressed }) => pressed && { opacity: 0.5 }} onPress={selectDatePressHandler}>
-                        <Text style={{ fontSize: 16 }}>{format(date, 'MM/dd/yy')}</Text>
+                        <Text style={{ fontSize: 16 }}>{format(currentDate, 'MM/dd/yy')}</Text>
                     </Pressable>
                 </View>
             )
         });
-    }, [navigation, date]);
+    }, [navigation, currentDate]);
 
     const onSwitchValueChange = () => {
         setEventData(prevData => ({ ...prevData, allDay: !prevData.allDay }));
     };
 
     const addButtonHandler = () => {
-        saveEvent({ ...eventData, date: date }).then(() => {
-            navigation.goBack();
-        });
+        setEvents(prevEvents => ([...prevEvents, { ...eventData, date: currentDate }]));
+        navigation.goBack();
     };
 
     return (
@@ -142,6 +143,7 @@ const AddEventScreen = ({ navigation }) => {
                 <Text style={styles.addBtnText}>Add Event</Text>
             </Pressable>
             <DateTimePickerModal
+                date={currentDate}
                 isVisible={showDatePicker}
                 mode="date"
                 onConfirm={handleDateConfirm}

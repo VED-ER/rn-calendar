@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Month from '../components/Month';
 import {
     addMonths,
@@ -14,10 +14,12 @@ import {
     subMonths
 } from 'date-fns';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AppContext from '../store/AppContext';
 
 export default function MonthViewScreen({ navigation }) {
     const [height, setHeight] = useState(1);
-    const [currentDate, setCurrentDate] = useState(new Date());
+
+    const { currentDate, setCurrentDate } = useContext(AppContext);
 
     const firstWeekStart = startOfWeek(startOfMonth(currentDate), { weekStartsOn: 1 });
     const lastWeekEnd = endOfWeek(endOfMonth(currentDate), { weekStartsOn: 1 });
