@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
         height: 10,
         borderRadius: 10,
         marginRight: 5,
-        marginBottom: 2
+        // marginBottom: 2
     },
     timedDayEventContainer: {
         flexDirection: 'row',
-        alignItems: 'flex-end'
+        alignItems: 'baseline'
     },
     timedDayEventText: {
         fontSize: 12,

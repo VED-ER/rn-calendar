@@ -6,7 +6,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { ADD_EVENT } from '../navigations/routes';
 import AppContext from '../store/AppContext';
-import { compareAsc } from 'date-fns';
 
 const numColumns = 7;
 
@@ -16,7 +15,7 @@ const Month = ({ days, height, width }) => {
     const { events } = useContext(AppContext);
 
     const renderItem = ({ item, index }) => {
-        const dayEvents = events.filter(e => e.date.toDateString() === item.toDateString());
+        const dayEvents = events.filter(e => e.date === item.toDateString());
 
         return (
             <MonthDay date={item} height={height} index={index} dayEvents={dayEvents} />

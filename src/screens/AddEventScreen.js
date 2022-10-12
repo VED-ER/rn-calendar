@@ -4,8 +4,8 @@ import { format } from 'date-fns';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { v4 as uuidv4 } from 'uuid';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../store/AppContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const KEY = 'EVENTS_DATA';
 
@@ -15,7 +15,7 @@ const AddEventScreen = ({ navigation }) => {
     const [showStartTimePicker, setShowStartTimePicker] = useState(false);
     const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
-    const { currentDate, setCurrentDate, setEvents } = useContext(AppContext);
+    const { currentDate, setCurrentDate, setEvents, events } = useContext(AppContext);
 
     const selectDatePressHandler = () => {
         setShowDatePicker(true);
@@ -68,8 +68,16 @@ const AddEventScreen = ({ navigation }) => {
         setEventData(prevData => ({ ...prevData, allDay: !prevData.allDay }));
     };
 
-    const addButtonHandler = () => {
-        setEvents(prevEvents => ([...prevEvents, { ...eventData, date: currentDate }]));
+    const addButtonHandler = async () => {
+        const newEvents = [...events, { ...eventData, date: currentDate.toDateString(), id: uuidv4() }];
+        setEvents(newEvents);
+
+        try {
+            await AsyncStorage.setItem(KEY, JSON.stringify(newEvents));
+        } catch (e) {
+            console.log('ERROR');
+        }
+
         navigation.goBack();
     };
 
