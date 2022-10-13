@@ -111,11 +111,13 @@ const styles = StyleSheet.create({
     },
     timedDayEventContainer: {
         flexDirection: 'row',
-        alignItems: 'baseline'
+        alignItems: 'center',
+        marginBottom: 3
     },
     timedDayEventText: {
         fontSize: 12,
-        color: 'black'
+        color: 'black',
+        maxWidth:'85%'
     },
     viewMoreText: {
         fontSize: 12,

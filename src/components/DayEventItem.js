@@ -1,18 +1,38 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { format } from 'date-fns';
 
 const DayEventItem = ({ event }) => {
-    return (
-        <View style={[styles.container, { backgroundColor: event.color }]}>
+
+    const AllDayEvent = () => (
+        <View style={[styles.allDayEventContainer, { backgroundColor: event.color }]}>
             <Text style={styles.dayItemText}>{event.name}</Text>
         </View>
     );
+
+    const TimedDayEvent = () => (
+        <View style={styles.timeDayEventContainer}>
+            <View style={[styles.timedDayEventCircle, { backgroundColor: event.color }]} />
+            <View style={styles.timedDayEventTextContainer}>
+                <Text
+                    style={{ maxWidth: '80%' }}
+                    ellipsizeMode='tail'
+                    numberOfLines={1}
+                >
+                    {event.name}
+                </Text>
+                <Text>{format(new Date(event.startTime), 'HH : mm aa')}</Text>
+            </View>
+        </View>
+    );
+
+    return event.allDay ? <AllDayEvent /> : <TimedDayEvent />;
 };
 
 export default DayEventItem;
 
 const styles = StyleSheet.create({
-    container: {
+    allDayEventContainer: {
         borderRadius: 10,
         padding: 10,
         marginBottom: 5
@@ -20,5 +40,23 @@ const styles = StyleSheet.create({
     dayItemText: {
         color: 'white',
         fontSize: 15
+    },
+    timeDayEventContainer: {
+        borderRadius: 10,
+        padding: 10,
+        marginBottom: 5,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    timedDayEventCircle: {
+        height: 20,
+        width: 20,
+        borderRadius: 20,
+        marginRight: 15
+    },
+    timedDayEventTextContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     }
 });
