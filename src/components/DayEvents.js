@@ -1,10 +1,15 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import DayEventItem from './DayEventItem';
+import { EDIT_EVENT } from '../navigations/routes';
 
-const DayEvents = ({ events }) => {
+const DayEvents = ({ events, navigation }) => {
 
-    const renderItem = ({ item }) => <DayEventItem event={item} />;
+    const onEventPress = (id) => {
+        navigation.navigate(EDIT_EVENT, { eventId: id });
+    };
+
+    const renderItem = ({ item }) => <DayEventItem event={item} onEventPress={onEventPress.bind(this, item.id)} />;
 
     return (
         <View>

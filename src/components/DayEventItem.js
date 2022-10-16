@@ -1,29 +1,33 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { format } from 'date-fns';
 
-const DayEventItem = ({ event }) => {
+const DayEventItem = ({ event, onEventPress }) => {
 
     const AllDayEvent = () => (
-        <View style={[styles.allDayEventContainer, { backgroundColor: event.color }]}>
-            <Text style={styles.dayItemText}>{event.name}</Text>
-        </View>
+        <Pressable onPress={onEventPress}>
+            <View style={[styles.allDayEventContainer, { backgroundColor: event.color }]}>
+                <Text style={styles.dayItemText}>{event.name}</Text>
+            </View>
+        </Pressable>
     );
 
     const TimedDayEvent = () => (
-        <View style={styles.timeDayEventContainer}>
-            <View style={[styles.timedDayEventCircle, { backgroundColor: event.color }]} />
-            <View style={styles.timedDayEventTextContainer}>
-                <Text
-                    style={{ maxWidth: '80%' }}
-                    ellipsizeMode='tail'
-                    numberOfLines={1}
-                >
-                    {event.name}
-                </Text>
-                <Text>{format(new Date(event.startTime), 'HH : mm aa')}</Text>
+        <Pressable onPress={onEventPress}>
+            <View style={styles.timeDayEventContainer}>
+                <View style={[styles.timedDayEventCircle, { backgroundColor: event.color }]} />
+                <View style={styles.timedDayEventTextContainer}>
+                    <Text
+                        style={{ maxWidth: '80%' }}
+                        ellipsizeMode='tail'
+                        numberOfLines={1}
+                    >
+                        {event.name}
+                    </Text>
+                    <Text>{format(new Date(event.startTime), 'HH : mm aa')}</Text>
+                </View>
             </View>
-        </View>
+        </Pressable>
     );
 
     return event.allDay ? <AllDayEvent /> : <TimedDayEvent />;

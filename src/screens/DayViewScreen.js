@@ -3,11 +3,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import AppContext from '../store/AppContext';
 import DayEvents from '../components/DayEvents';
+import { useIsFocused } from '@react-navigation/native';
 
 const DayViewScreen = ({ navigation, route }) => {
-    const [selectedDate, setSelectedDate] = useState();
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [dayEvents, setDayEvents] = useState([]);
 
+    const isFocused = useIsFocused();
     const { events } = useContext(AppContext);
 
     useEffect(() => {
@@ -15,8 +17,11 @@ const DayViewScreen = ({ navigation, route }) => {
             const e = events.filter(e => e.date === route.params.dayDate);
             setDayEvents(e);
             setSelectedDate(new Date(route.params.dayDate));
+        } else {
+            const e = events.filter(e => e.date === selectedDate.toDateString());
+            setDayEvents(e);
         }
-    }, [route?.params?.dayDate]);
+    }, [route?.params?.dayDate, isFocused]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -26,7 +31,7 @@ const DayViewScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <DayEvents events={dayEvents} />
+            <DayEvents events={dayEvents} navigation={navigation} />
         </View>
     );
 };

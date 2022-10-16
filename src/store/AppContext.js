@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const KEY = 'EVENTS_DATA';
@@ -8,12 +8,55 @@ const AppContext = React.createContext({
     setCurrentDate: () => { },
 
     events: [],
-    setEvents: () => { }
+    setEvents: () => { },
+    addEvent: () => { },
+    deleteEvent: () => { },
+    editEvent: () => { }
 });
+
+const eventsReducer = (state, action) => {
+    switch (action.type) {
+        case 'ADD':
+            // brand new array and object to make a brand new state snapshot
+            return [...state, { ...action.payload }];
+        case 'EDIT':
+            const editEventIndex = state.findIndex(e => e.id === action.payload.id);
+            const editEvent = state[editEventIndex];
+            const editedEvent = { ...editEvent, ...action.payload.data };
+            const editedEvents = [...state];
+            editedEvents[editEventIndex] = editedEvent;
+            return editedEvents;
+        case 'DELETE':
+            return state.filter(e => e.id !== action.payload.id);
+        default:
+            return state;
+    }
+};
 
 export const AppContextProvider = ({ children }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [events, setEvents] = useState([]);
+
+    const [eventsState, dispatch] = useReducer(eventsReducer, []);
+
+    const addEvent = (event) => {
+        dispatch({ type: 'ADD', payload: event });
+    };
+
+    const deleteEvent = (eventId) => {
+        dispatch({ type: 'DELETE', payload: eventId });
+    };
+
+    const editEvent = (eventId, event) => {
+        dispatch({ type: 'EDIT', payload: { id: eventId, data: event } });
+    };
+
+    const writeData = async () => {
+        try {
+            await AsyncStorage.setItem(KEY, JSON.stringify(events));
+        } catch (e) {
+            console.log('ERROR');
+        }
+    };
 
     const fetchEvents = async () => {
         try {
@@ -34,8 +77,10 @@ export const AppContextProvider = ({ children }) => {
         currentDate,
         setCurrentDate,
 
-        events,
-        setEvents
+        events: eventsState,
+        addEvent,
+        deleteEvent,
+        editEvent
     };
 
     return (

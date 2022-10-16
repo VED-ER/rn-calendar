@@ -10,10 +10,9 @@ import { isSameMonth } from 'date-fns';
 
 const numColumns = 7;
 
-const Month = ({ days, height, width }) => {
+const Month = ({ days, height, width, events, currentDate }) => {
     const navigation = useNavigation();
 
-    const { events, currentDate } = useContext(AppContext);
 
     const renderItem = ({ item, index }) => {
         const dayEvents = events.filter(e => e.date === item.toDateString());

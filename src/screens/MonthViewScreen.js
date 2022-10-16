@@ -19,7 +19,7 @@ import AppContext from '../store/AppContext';
 export default function MonthViewScreen({ navigation }) {
     const [height, setHeight] = useState(1);
 
-    const { currentDate, setCurrentDate } = useContext(AppContext);
+    const { currentDate, setCurrentDate, events } = useContext(AppContext);
 
     const firstWeekStart = startOfWeek(startOfMonth(currentDate), { weekStartsOn: 1 });
     const lastWeekEnd = endOfWeek(endOfMonth(currentDate), { weekStartsOn: 1 });
@@ -52,6 +52,7 @@ export default function MonthViewScreen({ navigation }) {
     const todayBtnHandler = () => {
         setCurrentDate(new Date());
     };
+
 
     useEffect(() => {
         navigation.setOptions({
@@ -91,6 +92,8 @@ export default function MonthViewScreen({ navigation }) {
             <Month
                 days={checkNumberOfWeeks(currentMonthDays)}
                 height={height - 40}
+                events={events}
+                currentDate={currentDate}
             />
         </View>
     );
