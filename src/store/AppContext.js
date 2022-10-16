@@ -1,5 +1,6 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from "react-native";
 
 const KEY = 'EVENTS_DATA';
 
@@ -27,7 +28,9 @@ const eventsReducer = (state, action) => {
             editedEvents[editEventIndex] = editedEvent;
             return editedEvents;
         case 'DELETE':
-            return state.filter(e => e.id !== action.payload.id);
+            return state.filter(e => e.id !== action.payload);
+        case 'INIT':
+            return action.payload;
         default:
             return state;
     }
@@ -37,6 +40,8 @@ export const AppContextProvider = ({ children }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
 
     const [eventsState, dispatch] = useReducer(eventsReducer, []);
+
+    const firstUpdate = useRef(true);
 
     const addEvent = (event) => {
         dispatch({ type: 'ADD', payload: event });
@@ -52,9 +57,9 @@ export const AppContextProvider = ({ children }) => {
 
     const writeData = async () => {
         try {
-            await AsyncStorage.setItem(KEY, JSON.stringify(events));
+            await AsyncStorage.setItem(KEY, JSON.stringify(eventsState));
         } catch (e) {
-            console.log('ERROR');
+            Alert.alert('Error', 'An error occured');
         }
     };
 
@@ -62,12 +67,20 @@ export const AppContextProvider = ({ children }) => {
         try {
             const data = await AsyncStorage.getItem(KEY);
             if (data !== null) {
-                setEvents(JSON.parse(data));
+                dispatch({ type: 'INIT', payload: JSON.parse(data) });
             }
         } catch (e) {
-            console.log("ERROR");
+            Alert.alert('Error', 'An error occured');
         }
     };
+
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+        writeData();
+    }, [eventsState]);
 
     useEffect(() => {
         fetchEvents();

@@ -13,7 +13,6 @@ const numColumns = 7;
 const Month = ({ days, height, width, events, currentDate }) => {
     const navigation = useNavigation();
 
-
     const renderItem = ({ item, index }) => {
         const dayEvents = events.filter(e => e.date === item.toDateString());
 

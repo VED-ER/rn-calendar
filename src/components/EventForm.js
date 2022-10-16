@@ -23,8 +23,8 @@ const EventForm = ({ navigation, edit, editId }) => {
     };
 
     const handleDateConfirm = (selectedDate) => {
-        setCurrentDate(selectedDate);
         setShowDatePicker(false);
+        setCurrentDate(selectedDate);
     };
 
     const hideDatePicker = () => {
