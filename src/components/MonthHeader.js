@@ -14,7 +14,7 @@ const MonthHeader = () => {
     );
 
     return (
-        <View style={styles.container}>
+        <View>
             <FlatList
                 data={data}
                 renderItem={renderItem}
@@ -36,9 +36,6 @@ const MonthHeader = () => {
 export default MonthHeader;
 
 const styles = StyleSheet.create({
-    container: {
-        // height: 100
-    },
     itemContainer: {
         flex: 1,
         height: 30,
@@ -51,7 +48,7 @@ const styles = StyleSheet.create({
         height: 10,
         borderColor: 'lightgray',
         borderRightWidth: 1,
-        borderBottomWidth:1,
+        borderBottomWidth: 1,
         backgroundColor: 'white'
     }
 });

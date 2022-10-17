@@ -1,37 +1,31 @@
-import { FlatList, StyleSheet, Text, View, Pressable, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View, Pressable, Platform } from 'react-native';
+import React from 'react';
 import MonthDay from './MonthDay';
-import { FlatGrid } from 'react-native-super-grid';
 import MonthHeader from './MonthHeader';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { ADD_EVENT } from '../navigations/routes';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isSameMonth } from 'date-fns';
 
 const numColumns = 7;
-const KEY = 'EVENTS_DATA';
 
-const Month = ({ days, height, width }) => {
-    const [events, setEvents] = useState([]);
+const Month = ({ days, height, width, events, currentDate }) => {
     const navigation = useNavigation();
 
-    const renderItem = ({ item, index }) => <MonthDay date={item} height={height} index={index} events={events} />;
+    const renderItem = ({ item, index }) => {
+        const dayEvents = events.filter(e => e.date === item.toDateString());
 
-    useEffect(() => {
-        const getEvents = async () => {
-            try {
-                const data = await AsyncStorage.getItem(KEY);
-                if (data !== null) {
-                    setEvents(JSON.parse(data));
-                }
-            } catch (e) {
-                Alert.alert('error', 'an error occured');
-            }
-        };
-
-        getEvents();
-
-    }, []);
+        const isCurrentMonthDay = isSameMonth(item, currentDate);
+        return (
+            <MonthDay
+                date={item}
+                height={height}
+                index={index}
+                dayEvents={dayEvents}
+                isCurrentMonthDay={isCurrentMonthDay}
+            />
+        );
+    };
 
     return (
         <View style={[styles.container, { width }]} >
@@ -43,8 +37,11 @@ const Month = ({ days, height, width }) => {
                 numColumns={numColumns}
                 bounces={false}
             />
-            <View style={styles.addEventBtn}>
-                <Pressable style={({ pressed }) => pressed && { opacity: 0.5 }} onPress={() => navigation.navigate(ADD_EVENT, { days: JSON.stringify(days) })}>
+            <View style={[styles.addEventBtn, Platform.OS === 'ios' ? { bottom: 15, right: 15 } : {}]}>
+                <Pressable
+                    style={({ pressed }) => pressed && { opacity: 0.5 }}
+                    onPress={() => navigation.navigate(ADD_EVENT)}
+                >
                     <MaterialIcons name="add" size={34} color="white" />
                 </Pressable>
             </View>
@@ -57,12 +54,6 @@ export default Month;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // marginHorizontal: "auto",
-        // width: 400,
-        // flexDirection: "row",
-        // flexWrap: "wrap",
-        // justifyContent: 'center',
-        // alignItems: 'center'
     },
     addEventBtn: {
         position: 'absolute',

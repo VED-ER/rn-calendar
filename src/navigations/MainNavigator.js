@@ -1,8 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddEventScreen from "../screens/AddEventScreen";
+import EditEventScreen from "../screens/EditEventScreen";
 import OnboardingWizardScreen from "../screens/OnboardingWizardScreen";
 import DrawerNavigator from "./DrawerNavigator";
-import { MAIN, DRAWER, ONBOARDING_WIZARD, ADD_EVENT } from "./routes";
+import { MAIN, DRAWER, ONBOARDING_WIZARD, ADD_EVENT, EDIT_EVENT } from "./routes";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ const AppNavigator = () => {
                 headerShown: false,
             }} />
             <Stack.Screen name={ADD_EVENT} component={AddEventScreen} />
+            <Stack.Screen name={EDIT_EVENT} component={EditEventScreen} />
         </Stack.Navigator>
     );
 };

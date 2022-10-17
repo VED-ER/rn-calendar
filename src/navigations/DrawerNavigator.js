@@ -1,5 +1,5 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import DayView from "../screens/DayView";
+import DayViewScreen from "../screens/DayViewScreen";
 import MonthViewScreen from "../screens/MonthViewScreen";
 import { DAY_VIEW, MONTH_VIEW } from "./routes";
 
@@ -15,16 +15,14 @@ const DrawerNavigator = () => {
                 options={{
                     headerShadowVisible: false,
                     headerTitleAlign: 'left',
-                    drawerLabel: 'Month',
-
+                    drawerLabel: 'Month'
                 }}
             />
             <Drawer.Screen
                 name={DAY_VIEW}
-                component={DayView}
+                component={DayViewScreen}
                 options={{
-                    drawerLabel: 'Day',
-
+                    drawerLabel: 'Day'
                 }}
             />
         </Drawer.Navigator>
