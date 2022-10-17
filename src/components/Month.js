@@ -1,11 +1,10 @@
-import { FlatList, StyleSheet, View, Pressable } from 'react-native';
-import React, { useContext } from 'react';
+import { FlatList, StyleSheet, View, Pressable, Platform } from 'react-native';
+import React from 'react';
 import MonthDay from './MonthDay';
 import MonthHeader from './MonthHeader';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { ADD_EVENT } from '../navigations/routes';
-import AppContext from '../store/AppContext';
 import { isSameMonth } from 'date-fns';
 
 const numColumns = 7;
@@ -18,7 +17,13 @@ const Month = ({ days, height, width, events, currentDate }) => {
 
         const isCurrentMonthDay = isSameMonth(item, currentDate);
         return (
-            <MonthDay date={item} height={height} index={index} dayEvents={dayEvents} isCurrentMonthDay={isCurrentMonthDay} />
+            <MonthDay
+                date={item}
+                height={height}
+                index={index}
+                dayEvents={dayEvents}
+                isCurrentMonthDay={isCurrentMonthDay}
+            />
         );
     };
 
@@ -32,7 +37,7 @@ const Month = ({ days, height, width, events, currentDate }) => {
                 numColumns={numColumns}
                 bounces={false}
             />
-            <View style={styles.addEventBtn}>
+            <View style={[styles.addEventBtn, Platform.OS === 'ios' ? { bottom: 15, right: 15 } : {}]}>
                 <Pressable
                     style={({ pressed }) => pressed && { opacity: 0.5 }}
                     onPress={() => navigation.navigate(ADD_EVENT)}

@@ -1,22 +1,18 @@
-import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { v4 as uuidv4 } from 'uuid';
 import AppContext from '../store/AppContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DAY_VIEW } from '../navigations/routes';
-
-const KEY = 'EVENTS_DATA';
 
 const EventForm = ({ navigation, edit, editId }) => {
-    const [eventData, setEventData] = useState({});
+    const [eventData, setEventData] = useState({ color: 'blue' });
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartTimePicker, setShowStartTimePicker] = useState(false);
     const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
-    const { currentDate, setCurrentDate, setEvents, events, addEvent, deleteEvent, editEvent } = useContext(AppContext);
+    const { currentDate, setCurrentDate, events, addEvent, deleteEvent, editEvent } = useContext(AppContext);
 
     const selectDatePressHandler = () => {
         setShowDatePicker(true);
@@ -105,7 +101,7 @@ const EventForm = ({ navigation, edit, editId }) => {
             <View>
                 <Text style={styles.labelText}>Name</Text>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, Platform.OS === 'ios' ? { paddingVertical: 10 } : {}]}
                     onChangeText={(text) => setEventData(prevData => ({ ...prevData, name: text }))}
                     value={eventData.name}
                     placeholder='Event name'
@@ -116,7 +112,7 @@ const EventForm = ({ navigation, edit, editId }) => {
                     onValueChange={onSwitchValueChange}
                     value={eventData.allDay}
                 />
-                <Text>All day?</Text>
+                <Text style={Platform.OS === 'ios' ? { marginLeft: 10 } : {}}>All day?</Text>
             </View>
             <View style={styles.selectTimeContainer}>
                 <View style={{ flex: 1 }}>
