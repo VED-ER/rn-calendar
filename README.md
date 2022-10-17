@@ -22,7 +22,7 @@ Download expo go app and scan the code: https://expo.dev/@vedran20/rn-calendar?s
 - Events are saved in local storage
 
 ## Screenshot
-
+![image](https://user-images.githubusercontent.com/92994473/196105538-b24686e8-543b-4b5b-89bb-19d020d0c043.png)
 
 
 ## Author
