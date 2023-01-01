@@ -3,10 +3,11 @@ import React, { useRef, useState } from 'react';
 import OnboardingSlide from '../components/OnboardingSlide';
 import OnboardingPaginator from '../components/OnboardingPaginator';
 import { MAIN } from '../navigations/routes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ONBOARDING_WIZARD_SEEN } from '../data/constants';
 
 export default function OnboardingWizardScreen({ navigation }) {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-    const [scrollEnabled, setScrollEnabled] = useState(true);
 
     const sliderRef = useRef();
     const renderSlide = ({ item }) => (
@@ -16,18 +17,23 @@ export default function OnboardingWizardScreen({ navigation }) {
     const nextSlideButtonHandler = () => {
         sliderRef.current.scrollToIndex({ index: currentSlideIndex + 1 });
         setCurrentSlideIndex(prevIdx => prevIdx + 1);
-        if (currentSlideIndex === 1) setScrollEnabled(false);
     };
 
     const viewableItemsChanged = useRef(({ viewableItems }) => {
         const currIdx = viewableItems[0]?.index;
-        if (currIdx === 2) setScrollEnabled(false);
         setCurrentSlideIndex(currIdx);
     }).current;
 
     const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
-    const gotItButtonHandler = () => navigation.reset({ index: 0, routes: [{ name: MAIN }] });
+    const gotItButtonHandler = async () => {
+        try {
+            await AsyncStorage.setItem(ONBOARDING_WIZARD_SEEN, 'true');
+            navigation.reset({ index: 0, routes: [{ name: MAIN }] })
+        } catch (e) {
+            Alert.alert('Error', 'An error occured');
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -42,7 +48,6 @@ export default function OnboardingWizardScreen({ navigation }) {
                 onViewableItemsChanged={viewableItemsChanged}
                 viewabilityConfig={viewConfig}
                 showsHorizontalScrollIndicator={false}
-                scrollEnabled={scrollEnabled}
             />
             <OnboardingPaginator
                 data={onboardingImages}

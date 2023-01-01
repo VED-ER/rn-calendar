@@ -5,7 +5,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 export default function OnboardingPaginator({ data, currentIndex, onPress, onGotItButtonPress }) {
 
     const GotItButton = () => (
-        <Pressable onPress={onGotItButtonPress} style={styles.gotItBtnStyle}>
+        <Pressable onPress={onGotItButtonPress} style={({ pressed }) => ([styles.gotItBtnStyle, pressed && { opacity: 0.5 }])}>
             <Text style={styles.gotItBtnText}>Got it</Text>
         </Pressable>
     );
@@ -21,7 +21,7 @@ export default function OnboardingPaginator({ data, currentIndex, onPress, onGot
                     key={idx.toString()}
                 />)}
             </View>
-            <Pressable onPress={onPress}>
+            <Pressable onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.5 }}>
                 <MaterialIcons name="keyboard-arrow-right" size={30} color="black" />
             </Pressable>
         </View>

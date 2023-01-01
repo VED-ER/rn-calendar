@@ -59,7 +59,11 @@ export default function MonthViewScreen({ navigation }) {
             title: format(currentDate, 'MMMM yyyy'),
             headerRight: () => (
                 <View style={styles.headerContainer}>
-                    <Pressable android_ripple={{ color: 'lightgray' }} onPress={todayBtnHandler} >
+                    <Pressable
+                        android_ripple={{ color: 'lightgray' }}
+                        onPress={todayBtnHandler}
+                        style={({ pressed }) => pressed && { opacity: 0.5 }}
+                    >
                         <MaterialIcons
                             name="calendar-today"
                             size={24}
@@ -67,14 +71,22 @@ export default function MonthViewScreen({ navigation }) {
                         />
                     </Pressable>
                     <View style={styles.headerInnerContainer}>
-                        <Pressable android_ripple={{ color: 'lightgray' }} onPress={prevMonthBtnHandler}>
+                        <Pressable
+                            android_ripple={{ color: 'lightgray' }}
+                            onPress={prevMonthBtnHandler}
+                            style={({ pressed }) => pressed && { opacity: 0.5 }}
+                        >
                             <MaterialIcons
                                 name="keyboard-arrow-left"
                                 size={34}
                                 color="black"
                             />
                         </Pressable>
-                        <Pressable android_ripple={{ color: 'lightgray' }} onPress={nextMonthBtnHandler}>
+                        <Pressable
+                            android_ripple={{ color: 'lightgray' }}
+                            onPress={nextMonthBtnHandler}
+                            style={({ pressed }) => pressed && { opacity: 0.5 }}
+                        >
                             <MaterialIcons
                                 name="keyboard-arrow-right"
                                 size={34}

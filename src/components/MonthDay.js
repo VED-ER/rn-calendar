@@ -43,10 +43,10 @@ const MonthDay = ({ date, height, index, dayEvents, isCurrentMonthDay }) => {
     };
 
     return (
-        <Pressable style={[styles.container, {
+        <Pressable style={({ pressed }) => ([styles.container, {
             height: height / 6,
             borderBottomWidth: index > 34 ? 0 : 1
-        }, isCurrentMonthDay ? {} : { backgroundColor: '#f0f0f0' }]}
+        }, isCurrentMonthDay ? {} : { backgroundColor: '#f0f0f0' }, pressed && { opacity: 0.5 }])}
             android_ripple={{ color: 'lightgray' }}
             onPress={() => navigation.navigate(DAY_VIEW, { dayDate: date.toDateString() })}
         >
@@ -82,14 +82,16 @@ const styles = StyleSheet.create({
     dayNumberActive: {
         textAlign: 'center',
         color: 'white',
-        fontSize: 13
+        fontSize: 13,
+        marginTop: 2.5
     },
     activeDay: {
         backgroundColor: 'darkblue',
         borderRadius: 20,
         width: 22,
         height: 22,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginTop: -2.5
     },
     dayEventsContainer: {
         marginTop: 5
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
     timedDayEventText: {
         fontSize: 12,
         color: 'black',
-        maxWidth:'85%'
+        maxWidth: '85%'
     },
     viewMoreText: {
         fontSize: 12,

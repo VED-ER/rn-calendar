@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import AppContext from '../store/AppContext';
 import DayEvents from '../components/DayEvents';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -30,7 +30,7 @@ const DayViewScreen = ({ navigation, route }) => {
             setDayEvents(e);
             setSelectedDate(new Date(route.params.dayDate));
         }
-    }, [route?.params?.dayDate]);
+    }, [route?.params?.dayDate, isFocused]);
 
     useEffect(() => {
         const e = events.filter(e => e.date === selectedDate.toDateString());
@@ -45,7 +45,7 @@ const DayViewScreen = ({ navigation, route }) => {
                     <Pressable
                         android_ripple={{ color: 'lightgray' }}
                         onPress={() => setShowDatePicker(true)}
-                        style={{ marginRight: 20 }}
+                        style={({ pressed }) => ([{ marginRight: 20 }, pressed && { opacity: 0.5 }])}
                     >
                         <MaterialIcons
                             name="calendar-today"

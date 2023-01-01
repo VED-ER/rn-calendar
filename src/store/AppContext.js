@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from "react-native";
+import { EVENTS_DATA } from "../data/constants";
 
-const KEY = 'EVENTS_DATA';
 
 const AppContext = React.createContext({
     currentDate: null,
@@ -57,7 +57,7 @@ export const AppContextProvider = ({ children }) => {
 
     const writeData = async () => {
         try {
-            await AsyncStorage.setItem(KEY, JSON.stringify(eventsState));
+            await AsyncStorage.setItem(EVENTS_DATA, JSON.stringify(eventsState));
         } catch (e) {
             Alert.alert('Error', 'An error occured');
         }
@@ -65,7 +65,7 @@ export const AppContextProvider = ({ children }) => {
 
     const fetchEvents = async () => {
         try {
-            const data = await AsyncStorage.getItem(KEY);
+            const data = await AsyncStorage.getItem(EVENTS_DATA);
             if (data !== null) {
                 dispatch({ type: 'INIT', payload: JSON.parse(data) });
             }

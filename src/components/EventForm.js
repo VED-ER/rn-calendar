@@ -21,6 +21,7 @@ const EventForm = ({ navigation, edit, editId }) => {
     const handleDateConfirm = (selectedDate) => {
         setShowDatePicker(false);
         setCurrentDate(selectedDate);
+        setEventData(prevData => ({ ...prevData, date: selectedDate.toDateString() }))
     };
 
     const hideDatePicker = () => {
@@ -146,15 +147,15 @@ const EventForm = ({ navigation, edit, editId }) => {
                 <Text>Color</Text>
                 <View style={styles.colorsContainer}>
                     <Pressable
-                        style={[styles.colorBox, { backgroundColor: 'blue' }, eventData.color === 'blue' && { opacity: 1 }]}
+                        style={[styles.colorBox, { backgroundColor: 'blue' }, eventData.color === 'blue' && styles.selectedColor]}
                         onPress={() => handleColorSelect('blue')}
                     />
                     <Pressable
-                        style={[styles.colorBox, { backgroundColor: 'red' }, eventData.color === 'red' && { opacity: 1 }]}
+                        style={[styles.colorBox, { backgroundColor: 'red' }, eventData.color === 'red' && styles.selectedColor]}
                         onPress={() => handleColorSelect('red')}
                     />
                     <Pressable
-                        style={[styles.colorBox, { backgroundColor: 'green' }, eventData.color === 'green' && { opacity: 1 }]}
+                        style={[styles.colorBox, { backgroundColor: 'green' }, eventData.color === 'green' && styles.selectedColor]}
                         onPress={() => handleColorSelect('green')}
                     />
                 </View>
@@ -294,5 +295,9 @@ const styles = StyleSheet.create({
     deleteBtnText: {
         color: 'red',
         textAlign: 'center'
+    },
+    selectedColor: {
+        opacity: 1,
+        borderWidth: 2
     }
 });
