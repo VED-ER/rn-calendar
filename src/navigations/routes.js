@@ -5,3 +5,4 @@ export const MONTH_VIEW = 'MonthView'
 export const ADD_EVENT = 'AddEvent'
 export const EDIT_EVENT = 'EditEvent'
 export const DAY_VIEW = 'DayView'
+// git test
