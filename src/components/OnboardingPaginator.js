@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 30,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        paddingVertical:10
     },
     dotsContainer: {
         flexDirection: 'row',
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         paddingVertical: 10,
         borderRadius: 25,
-        marginBottom: 50
+        marginBottom: 40
     },
     gotItBtnText: {
         color: 'white'

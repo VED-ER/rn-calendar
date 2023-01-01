@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from "react-native";
 import * as Splash from 'expo-splash-screen'
 import { ONBOARDING_WIZARD_SEEN } from "../data/constants";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +39,8 @@ const AppNavigator = () => {
 
 const MainNavigator = () => {
     const [inited, setInited] = useState(false)
-    const [wizardSeen, setWizardSeen] = useState(true)
+
+    const navigation = useNavigation()
 
     useEffect(() => {
         getOnboardingWizardStatus()
@@ -52,14 +54,15 @@ const MainNavigator = () => {
 
     const getOnboardingWizardStatus = async () => {
         try {
-            const data = await AsyncStorage.getItem(ONBOARDING_WIZARD_SEEN);
-            if (data !== null) {
-                setWizardSeen(true)
-            }
+            const wizardSeen = await AsyncStorage.getItem(ONBOARDING_WIZARD_SEEN);
+            if (wizardSeen !== null) navigation.reset({ index: 0, routes: [{ name: MAIN }] })
         } catch (e) {
             Alert.alert('Error', 'An error occured');
         } finally {
-            setInited(true)
+            setTimeout(() => {
+                setInited(true)
+                // waiting for the initial (month) screen to be rendered
+            }, 500) 
         }
 
     }
@@ -68,14 +71,14 @@ const MainNavigator = () => {
         <Stack.Navigator screenOptions={{
             headerShown: false
         }}>
-            {!wizardSeen && <Stack.Screen
+            <Stack.Screen
                 name={ONBOARDING_WIZARD}
                 component={OnboardingWizardScreen}
                 options={{
                     headerShown: false
                 }}
-            />}
-            <Stack.Screen name={MAIN} component={AppNavigator} />
+            />
+            <Stack.Screen name={MAIN} component={AppNavigator} options={{ animation: 'none' }} />
         </Stack.Navigator>
     );
 };
